@@ -12,6 +12,7 @@ layout = [
 
 # create the window
 window = sg.Window("Python Calculator", layout)
+operation = "ERROR"
 
 while True:
     # interact with window
@@ -30,21 +31,35 @@ while True:
                 window[op].update(button_color=('white', 'dark blue'))
 
     if event == "Calculate":
-        first_value = float(values[0])
-        second_value = float(values[1])
-        if operation == "+":
-            result = first_value + second_value
-        elif operation == "-":
-            result = first_value - second_value
-        elif operation == "*":
-            result = first_value * second_value
-        elif operation == "/":
-            result = first_value / second_value
+        first_value = values[0]
+        second_value = values[1]
+        if (first_value == "" or second_value == ""):
+            sg.popup("ALERT", "Please enter numerical values!")
+        else:
+            try:
+                first_value = float(first_value)
+                second_value = float(second_value)
+                if operation == "+":
+                    result = first_value + second_value
+                elif operation == "-":
+                    result = first_value - second_value
+                elif operation == "*":
+                    result = first_value * second_value
+                elif operation == "/":
+                    result = first_value / second_value
+                else:
+                    sg.popup("ALERT", "Invalid Operation!")
+                    result = "ERROR"
 
-        sg.popup(result)
+                if (result != "ERROR"):
+                    sg.popup(result)
+            except ValueError:
+                sg.popup("Please enter numerical values!")
+                continue
         # Reset the color of operation buttons after calculation
         for op in ["+", "-", "*", "/"]:
             window[op].update(button_color=('white', 'dark blue'))
+        operation = "ERROR"
 
 # close window
 window.close()
